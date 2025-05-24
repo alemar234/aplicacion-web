@@ -384,4 +384,49 @@ body {
         width: 100%;
         justify-content: flex-end;
     }
+}
+
+/* Estilos para las alertas */
+.alert-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.alert {
+    padding: 12px 20px;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+    background-color: #4caf50;
+}
+
+.alert-error {
+    background-color: #f44336;
+}
+
+.alert.fade-out {
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 } 

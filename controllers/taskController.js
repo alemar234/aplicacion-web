@@ -16,7 +16,10 @@ const taskController = {
             }
 
             const task = await Task.create({ title, description, listId, dueDate });
-            res.json({ message: 'Tarea creada exitosamente', task });
+            const updatedList = await List.findById(listId);
+            const tasks = await Task.findByListId(listId);
+            
+            res.json({ message: 'Tarea creada exitosamente', list: updatedList, tasks });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -64,11 +67,6 @@ const taskController = {
                 return res.status(404).json({ error: 'Tarea no encontrada' });
             }
 
-            // Si se está actualizando el título, verificar que no esté vacío
-            if (title === '') {
-                return res.status(400).json({ error: 'El título no puede estar vacío' });
-            }
-
             const updatedTask = await Task.update(id, { 
                 title: title || task.title,
                 description: description !== undefined ? description : task.description,
@@ -76,7 +74,11 @@ const taskController = {
                 dueDate: dueDate || task.dueDate
             });
 
-            res.json({ message: 'Tarea actualizada exitosamente', task: updatedTask });
+            const listId = task.list_id;
+            const updatedList = await List.findById(listId);
+            const tasks = await Task.findByListId(listId);
+
+            res.json({ message: 'Tarea actualizada exitosamente', list: updatedList, tasks });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -91,8 +93,13 @@ const taskController = {
                 return res.status(404).json({ error: 'Tarea no encontrada' });
             }
 
+            const listId = task.list_id;
             await Task.delete(id);
-            res.json({ message: 'Tarea eliminada exitosamente' });
+            
+            const updatedList = await List.findById(listId);
+            const tasks = await Task.findByListId(listId);
+
+            res.json({ message: 'Tarea eliminada exitosamente', list: updatedList, tasks });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
